@@ -2,6 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 import { createTheme } from '@mui/material/styles';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -10,6 +11,8 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import LayersIcon from '@mui/icons-material/Layers';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import TablaProveedor from './TablaProveedor'
 
 const NAVIGATION = [
   {
@@ -25,6 +28,11 @@ const NAVIGATION = [
     segment: 'orders',
     title: 'Orders',
     icon: <ShoppingCartIcon />,
+  },
+  {
+    segment: 'proveedores',
+    title: 'Proveedores',
+    icon: <PeopleAltIcon />,
   },
   {
     kind: 'divider',
@@ -146,6 +154,19 @@ function DashboardContent() {
   );
 }
 
+function ProveedoresContent() {
+  return (
+    <Box>
+       <Typography variant="h4">Proveedores</Typography>
+       <Typography>Here is the Orders section content.</Typography>
+       <Button variant="contained" color="primary" style={{ margin: '20px 0' }}>
+        Agregar Proveedor
+      </Button>
+      <TablaProveedor/>
+    </Box>
+  );
+}
+
 function OrdersContent() {
   return (
     <Box>
@@ -186,6 +207,8 @@ function DemoPageContent({ pathname }) {
   switch (pathname) {
     case '/dashboard':
       return <DashboardContent />;
+    case '/proveedores':
+      return <ProveedoresContent />;
     case '/orders':
       return <OrdersContent />;
     case '/reports/sales':
