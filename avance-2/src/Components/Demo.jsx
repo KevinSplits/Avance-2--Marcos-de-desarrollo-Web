@@ -157,15 +157,31 @@ function DashboardContent() {
 function ProveedoresContent() {
   return (
     <Box>
-       <Typography variant="h4">Proveedores</Typography>
-       <Typography>Here is the Orders section content.</Typography>
-       <Button variant="contained" color="primary" style={{ margin: '20px 0' }}>
-        Agregar Proveedor
-      </Button>
       <TablaProveedor/>
     </Box>
   );
 }
+
+// function ProveedoresContent() {
+//   return (
+//     <Box 
+//       sx={{ 
+//         display: 'flex', 
+//         flexDirection: 'column', 
+//         alignItems: 'center', 
+//         justifyContent: 'center',
+//         minHeight: '100vh', // Esto asegura que la tabla esté centrada verticalmente
+//         textAlign: 'center'
+//       }}
+//     >
+//       <Typography variant="h4" sx={{ mb: 3 }}>
+//         Proveedores
+//       </Typography>
+      
+//       <TablaProveedor /> {/* Aquí está la tabla centrada */}
+//     </Box>
+//   );
+// }
 
 function OrdersContent() {
   return (
