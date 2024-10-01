@@ -12,7 +12,8 @@ import LayersIcon from '@mui/icons-material/Layers';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-import TablaProveedor from './TablaProveedor'
+import TablaProveedor from './TablaProveedor';
+import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 
 const NAVIGATION = [
   {
@@ -25,9 +26,9 @@ const NAVIGATION = [
     icon: <DashboardIcon />,
   },
   {
-    segment: 'orders',
-    title: 'Orders',
-    icon: <ShoppingCartIcon />,
+    segment: 'productos',
+    title: 'Productos',
+    icon: <SportsEsportsIcon />,
   },
   {
     segment: 'proveedores',
@@ -125,6 +126,9 @@ function DashboardLayoutBasic(props) {
     // preview-start
     <AppProvider
       navigation={NAVIGATION}
+      branding={{
+        title: 'Phanthom',
+      }}
       router={router}
       theme={demoTheme}
       window={demoWindow}
