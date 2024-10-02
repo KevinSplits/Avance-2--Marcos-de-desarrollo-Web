@@ -2,6 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 import { createTheme } from '@mui/material/styles';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -10,6 +11,9 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import LayersIcon from '@mui/icons-material/Layers';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import TablaProveedor from './TablaProveedor';
+import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
@@ -30,9 +34,14 @@ const NAVIGATION = [
     icon: <DashboardIcon />,
   },
   {
-    segment: 'orders',
-    title: 'Orders',
-    icon: <ShoppingCartIcon />,
+    segment: 'productos',
+    title: 'Productos',
+    icon: <SportsEsportsIcon />,
+  },
+  {
+    segment: 'proveedores',
+    title: 'Proveedores',
+    icon: <PeopleAltIcon />,
   },
   {
     kind: 'divider',
@@ -135,6 +144,9 @@ function DashboardLayoutBasic(props) {
     // preview-start
     <AppProvider
       navigation={NAVIGATION}
+      branding={{
+        title: 'Phanthom',
+      }}
       router={router}
       theme={demoTheme}
       window={demoWindow}
@@ -163,6 +175,35 @@ function DashboardContent() {
     </Box>
   );
 }
+
+function ProveedoresContent() {
+  return (
+    <Box>
+      <TablaProveedor/>
+    </Box>
+  );
+}
+
+// function ProveedoresContent() {
+//   return (
+//     <Box 
+//       sx={{ 
+//         display: 'flex', 
+//         flexDirection: 'column', 
+//         alignItems: 'center', 
+//         justifyContent: 'center',
+//         minHeight: '100vh', // Esto asegura que la tabla esté centrada verticalmente
+//         textAlign: 'center'
+//       }}
+//     >
+//       <Typography variant="h4" sx={{ mb: 3 }}>
+//         Proveedores
+//       </Typography>
+      
+//       <TablaProveedor /> {/* Aquí está la tabla centrada */}
+//     </Box>
+//   );
+// }
 
 function OrdersContent() {
   return (
@@ -293,6 +334,8 @@ function DemoPageContent({ pathname }) {
   switch (pathname) {
     case '/dashboard':
       return <DashboardContent />;
+    case '/proveedores':
+      return <ProveedoresContent />;
     case '/orders':
       return <OrdersContent />;
     case '/reports/sales':

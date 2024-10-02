@@ -6,7 +6,9 @@
     "@mui/icons-material": "^6.1.1",
     "@mui/material": "^6.1.1",
     "@mui/styled-engine-sc": "^6.1.1",
+    "@mui/x-data-grid": "^7.18.0",
     "@toolpad/core": "^0.7.0",
+    "react-crud-table": "^0.3.1",
     "styled-components": "^6.1.13"
   }
 }
