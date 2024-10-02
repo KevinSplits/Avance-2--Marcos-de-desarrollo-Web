@@ -9,7 +9,6 @@ function App() {
   return (
     <>
       <Demo />
-     <h1>HOLA MUNDO</h1>
     </>
   )
 }

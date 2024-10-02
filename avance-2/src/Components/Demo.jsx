@@ -10,7 +10,15 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import LayersIcon from '@mui/icons-material/Layers';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
-
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
+import AnalyticsIcon from '@mui/icons-material/Analytics';
+import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import { List, ListItem, ListItemText, Button } from '@mui/material';
+import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {Card, CardContent, Grid, Chip } from '@mui/material';
 const NAVIGATION = [
   {
     kind: 'header',
@@ -31,29 +39,39 @@ const NAVIGATION = [
   },
   {
     kind: 'header',
-    title: 'Analytics',
+    title: 'Secciones Adicionales',
   },
   {
     segment: 'reports',
-    title: 'Reports',
-    icon: <BarChartIcon />,
+    title: 'Soporte el Cliente',
+    icon: <SupportAgentIcon />,
     children: [
       {
         segment: 'sales',
-        title: 'Sales',
-        icon: <DescriptionIcon />,
+        title: 'Centro de tickets',
+        icon: <ConfirmationNumberIcon />,
       },
       {
         segment: 'traffic',
-        title: 'Traffic',
-        icon: <DescriptionIcon />,
+        title: 'Preguntas Frecuentes',
+        icon: <QuestionAnswerIcon />,
       },
     ],
   },
   {
-    segment: 'integrations',
-    title: 'Integrations',
+    segment: 'integration1',
+    title: 'Análisis',
+    icon: <AnalyticsIcon />,
+  },
+  {
+    segment: 'integration2',
+    title: 'Proveedores',
     icon: <LayersIcon />,
+  },
+  {
+    segment: 'integration3',
+    title: 'Cuentas de Usuario',
+    icon: <ManageAccountsIcon />,
   },
 ];
 
@@ -165,22 +183,111 @@ function ReportsContent() {
 }
 
 function SalesContent() {
+  const [tickets, setTickets] = React.useState([
+    { id: 1, subject: "Problema con pedido", status: "Abierto", description: "El pedido llegó dañado." },
+    { id: 2, subject: "No puedo acceder a mi cuenta", status: "Cerrado", description: "Problema con la recuperación de contraseña." },
+    { id: 3, subject: "Pago duplicado", status: "Abierto", description: "Se cobró dos veces por el mismo pedido." },
+    { id: 4, subject: "Problema con entrega", status: "Abierto", description: "El pedido no ha llegado a la dirección indicada, a pesar de estar marcado como entregado." },
+    { id: 5, subject: "Producto defectuoso", status: "En Proceso", description: "El producto recibido presenta fallas en su funcionamiento y no enciende correctamente." },
+    { id: 6, subject: "Reembolso solicitado", status: "Cerrado", description: "El cliente ha solicitado un reembolso debido a un error en la facturación." }
+  ]);
+
+  const getStatusChipColor = (status) => {
+    return status === "Abierto" ? "success" : "default";
+  };
+
   return (
     <Box>
-      <Typography variant="h4">Sales Reports</Typography>
-      <Typography>Sales report details go here.</Typography>
+      <Typography variant="h4" sx={{ mb: 4, mt: 2, textAlign: 'center', fontWeight: 'bold' }}>
+        Centro de Tickets
+      </Typography>
+      <Grid container spacing={3}>
+        {tickets.map((ticket) => (
+          <Grid item xs={12} sm={6} md={4} key={ticket.id}>
+            <Card sx={{ m: 1 }}>
+              <CardContent>
+                <Typography variant="h6" gutterBottom>
+                  Ticket #{ticket.id} - {ticket.subject}
+                </Typography>
+                <Typography variant="body2" color="textSecondary" gutterBottom>
+                  {ticket.description}
+                </Typography>
+                <Chip label={ticket.status} color={getStatusChipColor(ticket.status)} sx={{ mb: 2, mx: 1 , mt: 2}} />
+                <Button variant="contained" color="primary">
+                  Ver detalles
+                </Button>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
     </Box>
   );
 }
 
+
+
+
+
 function TrafficContent() {
+  const faqs = [
+    { question: "¿Cómo rastrear mi pedido?", answer: "Puedes rastrear tu pedido desde la sección de pedidos." },
+    { question: "¿Qué hago si recibí un producto defectuoso?", answer: "Contacta con soporte y abre un ticket." },
+    { question: "¿Cómo puedo restablecer mi contraseña?", answer: "Para restablecer tu contraseña, ve a la sección de 'Mi cuenta' y selecciona 'Olvidé mi contraseña'. Recibirás un enlace en tu correo electrónico para restablecerla." },
+    { question: "¿Cuáles son los métodos de pago aceptados?", answer: "Aceptamos tarjetas de crédito, débito y transferencias bancarias." },
+    { question: "¿Cómo puedo seguir el estado de mi pedido?", answer: "Para seguir el estado de tu pedido, inicia sesión en tu cuenta y ve a la sección 'Mis pedidos'." },
+    { question: "¿Cómo puedo contactar al soporte?", answer: "Puedes contactar al soporte enviando un ticket a través del Centro de Soporte, o llamando a nuestro número de atención al cliente." }
+  ];
+
   return (
-    <Box>
-      <Typography variant="h4">Traffic Reports</Typography>
-      <Typography>Traffic report details go here.</Typography>
+    <Box sx={{ mx: 'auto', maxWidth: 800, p: 2 }}>
+      <Typography variant="h4" sx={{ mb: 4, textAlign: 'center', fontWeight: 'bold' }}>
+        Preguntas Frecuentes
+      </Typography>
+      {faqs.map((faq, index) => (
+        <Accordion key={index} sx={{ mb: 2 }}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography variant="h6" sx={{ fontWeight: 'medium' }}>
+              {faq.question}
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography variant="body1" color="textSecondary">
+              {faq.answer}
+            </Typography>
+          </AccordionDetails>
+        </Accordion>
+      ))}
     </Box>
   );
 }
+
+
+
+
+function SupplierAnalysisContent() {
+  const suppliers = [
+    { name: "Proveedor 1", performance: "80%" },
+    { name: "Proveedor 2", performance: "65%" },
+  ];
+
+  return (
+    <Box>
+      <Typography variant="h4">Análisis de Proveedores</Typography>
+      <List>
+        {suppliers.map((supplier, index) => (
+          <ListItem key={index}>
+            <ListItemText
+              primary={supplier.name}
+              secondary={`Rendimiento: ${supplier.performance}`}
+            />
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
+}
+
 
 function DemoPageContent({ pathname }) {
   switch (pathname) {
@@ -189,19 +296,20 @@ function DemoPageContent({ pathname }) {
     case '/orders':
       return <OrdersContent />;
     case '/reports/sales':
-      return <SalesContent />;
+      return <SalesContent />; // Centro de Tickets
     case '/reports/traffic':
-      return <TrafficContent />;
+      return <TrafficContent />; // Preguntas Frecuentes
+    case '/integration1':
+      return <SupplierAnalysisContent />; // Análisis de Proveedores
+    case '/integration2':
+      return <UserAccountsContent />; // Cuentas de Usuario
     case '/reports':
       return <ReportsContent />;
     default:
-      return (
-        <Typography variant="h6">
-          Page not found: {pathname}
-        </Typography>
-      );
+      return <Typography variant="h6">Page not found: {pathname}</Typography>;
   }
 }
+
 
 DemoPageContent.propTypes = {
   pathname: PropTypes.string.isRequired,
