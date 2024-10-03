@@ -38,6 +38,8 @@ import { Bar } from 'react-chartjs-2';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { Paper } from '@mui/material';
 import 'leaflet/dist/leaflet.css';
+import {  Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from '@mui/material';
+
 
 const NAVIGATION = [
   {
@@ -122,11 +124,6 @@ const NAVIGATION = [
     segment: 'integration1',
     title: 'Análisis',
     icon: <AnalyticsIcon />,
-  },
-  {
-    segment: 'integration2',
-    title: 'Proveedores',
-    icon: <LayersIcon />,
   },
   {
     segment: 'integration3',
@@ -274,13 +271,82 @@ function ProductosMasVendidosContent() {
     </Box>
   );
 }
+const users = [
+  { id: 1, name: 'Juan Perez', email: 'juan.perez@phantom.com', role: 'Admin' },
+  { id: 2, name: 'Maria García', email: 'maria.garcia@phantom.com', role: 'User' },
+  // Otros usuarios
+];
 
-function ReportsContent() {
+// Componente para manejar las acciones de usuario
+const UserActions = ({ onEdit, onDelete }) => (
+  <>
+      <Button
+          variant="contained"
+          color="primary"
+          sx={{ mr: 1 }}
+          onClick={onEdit}
+          aria-label="Editar usuario"
+      >
+          Editar
+      </Button>
+      <Button
+          variant="contained"
+          color="secondary"
+          onClick={onDelete}
+          aria-label="Eliminar usuario"
+      >
+          Eliminar
+      </Button>
+  </>
+);
+
+const ReportsContent = () => {
+  const handleEdit = (userId) => {
+      // Implementar lógica de edición
+      console.log(`Editando usuario con ID: ${userId}`);
+  };
+
+  const handleDelete = (userId) => {
+      // Implementar lógica de eliminación
+      console.log(`Eliminando usuario con ID: ${userId}`);
+  };
+
   return (
-    <Box>
-      <Typography variant="h4">Reports</Typography>
-      <Typography>Welcome to the Reports section.</Typography>
-    </Box>
+      <Box sx={{ p: 3 }}>
+          <Typography variant="h4" gutterBottom>
+              Cuentas de Usuario
+          </Typography>
+
+          <TableContainer component={Paper}>
+              <Table>
+                  <TableHead>
+                      <TableRow>
+                          <TableCell>ID</TableCell>
+                          <TableCell>Nombre</TableCell>
+                          <TableCell>Email</TableCell>
+                          <TableCell>Rol</TableCell>
+                          <TableCell>Acciones</TableCell>
+                      </TableRow>
+                  </TableHead>
+                  <TableBody>
+                      {users.map((user) => (
+                          <TableRow key={user.id}>
+                              <TableCell>{user.id}</TableCell>
+                              <TableCell>{user.name}</TableCell>
+                              <TableCell>{user.email}</TableCell>
+                              <TableCell>{user.role}</TableCell>
+                              <TableCell>
+                                  <UserActions
+                                      onEdit={() => handleEdit(user.id)}
+                                      onDelete={() => handleDelete(user.id)}
+                                  />
+                              </TableCell>
+                          </TableRow>
+                      ))}
+                  </TableBody>
+              </Table>
+          </TableContainer>
+      </Box>
   );
 }
 
@@ -487,6 +553,8 @@ function SupplierAnalysisContent() {
 </Box>
 
 
+
+
      {/* Mapa */}
 <Box mt={4} sx={{ m: 3 }}> {/* Agregar margen en todos los lados */}
   <Typography variant="h5" gutterBottom sx={{ m: 2 }}>
@@ -557,7 +625,7 @@ function DemoPageContent({ pathname }) {
       return <SupplierAnalysisContent />; // Análisis de Proveedores
     case '/integration2':
       return <UserAccountsContent />; // Cuentas de Usuario
-    case '/reports':
+    case '/integration3':
       return <ReportsContent />;
     default:
       return <Typography variant="h6">Page not found: {pathname}</Typography>;
