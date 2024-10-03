@@ -52,12 +52,12 @@ const NAVIGATION = [
     children: [
       {
         segment: 'resumenventas',
-        title: 'ResumenVentas',
+        title: 'Resumen de Ventas',
         icon: <EventAvailableIcon />,
       },
       {
         segment: 'productosmasvendidos',
-        title: 'ProductosMasVendidos',
+        title: 'Productos más Vendidos',
         icon: <StarIcon />,
       },
     ],
@@ -65,7 +65,7 @@ const NAVIGATION = [
   {
     segment: 'gestiondeventas',
     title: 'Gestión de Ventas',
-    icon: <StorefrontIcon />,
+    icon: <SellIcon />,
     children: [
       {
         segment: 'proveedores',
