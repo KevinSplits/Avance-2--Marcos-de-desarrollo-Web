@@ -1,54 +1,14 @@
 import React, { useState } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
-import { Box, Button, Modal, TextField, Grid, Typography, Paper, IconButton } from '@mui/material';
+import { Box, Button, Modal, TextField, Grid, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import AddIcon from '@mui/icons-material/Add'; // Importar ícono de "Agregar"
-
-const initialColumns = (handleDelete, handleEdit) => [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'companyName', headerName: 'Nombre de la Empresa', width: 180 },
-    { field: 'contactName', headerName: 'Nombre del Contacto', width: 150 },
-    { field: 'phoneNumber', headerName: 'Número de Teléfono', width: 150 },
-    { field: 'email', headerName: 'Correo Electrónico', width: 200 },
-    { field: 'country', headerName: 'País', width: 130 },
-    {
-        field: 'actions',
-        headerName: 'Acciones',
-        width: 180,
-        renderCell: (params) => (
-            <div>
-                <IconButton onClick={() => handleEdit(params.row)} color="primary">
-                    <EditIcon />
-                </IconButton>
-                <IconButton onClick={() => handleDelete(params.row.id)} color="secondary">
-                    <DeleteIcon />
-                </IconButton>
-            </div>
-        ),
-    },
-];
+import AddIcon from '@mui/icons-material/Add';
 
 const initialRows = [
     { id: 1, companyName: 'Game Suppliers Inc.', contactName: 'John Doe', phoneNumber: '555-1234', email: 'john.doe@gamesuppliers.com', country: 'EEUU' },
     { id: 2, companyName: 'VideoGames Unlimited', contactName: 'Jane Smith', phoneNumber: '555-5678', email: 'jane.smith@videogamesunlimited.com', country: 'Canadá' },
-    { id: 3, companyName: 'Gaming World', contactName: 'Carlos Rivera', phoneNumber: '555-9876', email: 'carlos.rivera@gamingworld.com', country: 'México' },
-    { id: 4, companyName: 'Pixel Play', contactName: 'Emma Johnson', phoneNumber: '555-2468', email: 'emma.johnson@pixelplay.com', country: 'Reino Unido' },
-    { id: 5, companyName: 'Epic Games Distributors', contactName: 'Liam Brown', phoneNumber: '555-1357', email: 'liam.brown@epicdistributors.com', country: 'Australia' },
-    { id: 6, companyName: 'Virtual Reality Ventures', contactName: 'Olivia Wilson', phoneNumber: '555-8642', email: 'olivia.wilson@vrventures.com', country: 'Alemania' },
-    { id: 7, companyName: 'NextGen Gaming', contactName: 'Noah Davis', phoneNumber: '555-7531', email: 'noah.davis@nextgengaming.com', country: 'Francia' },
-    { id: 8, companyName: 'Retro Game Hub', contactName: 'Sophia Martinez', phoneNumber: '555-1597', email: 'sophia.martinez@retrogamehub.com', country: 'España' },
-    { id: 9, companyName: 'Indie Games Co.', contactName: 'James Anderson', phoneNumber: '555-3698', email: 'james.anderson@indiegamesco.com', country: 'Italia' },
-    { id: 10, companyName: 'Gaming Supplies', contactName: 'Jake White', phoneNumber: '555-7890', email: 'jake.white@gamingsupplies.com', country: 'Japón' },
+    // Resto de los datos iniciales...
 ];
-
-const paginationModel = { page: 0, pageSize: 10 }; // 10 filas por página
-
-const localeText = {
-    noRowsLabel: "No se han encontrado datos.",
-    toolbarColumns: "Columnas",
-    paginationRowsPerPage: "Filas por página:",
-};
 
 export default function DataTable() {
     const [rows, setRows] = useState(initialRows);
@@ -124,12 +84,13 @@ export default function DataTable() {
                 minHeight: '100vh',
                 textAlign: 'center',
                 mt: 2,
+                px: { xs: 2, md: 3 },
             }}
         >
             {/* Título y botón "Agregar Proveedor" */}
-            <Grid container justifyContent="space-between" alignItems="center" sx={{ width: '80%', mb: 2 }}>
+            <Grid container justifyContent="space-between" alignItems="center" sx={{ width: '100%', mb: 2 }}>
                 <Grid item>
-                    <Typography variant="h4">
+                    <Typography variant="h4" sx={{ fontSize: { xs: '1.5rem', md: '2rem' } }}>
                         Proveedores
                     </Typography>
                 </Grid>
@@ -140,16 +101,41 @@ export default function DataTable() {
                 </Grid>
             </Grid>
 
-            <Paper sx={{ height: 'auto', width: '80%', overflow: 'hidden' }}>
-                <DataGrid
-                    rows={rows}
-                    columns={initialColumns(handleDelete, handleEdit)}
-                    initialState={{ pagination: { paginationModel } }}
-                    pageSizeOptions={[10]}
-                    localeText={localeText}
-                    sx={{ border: 0, overflow: 'hidden' }}
-                />
-            </Paper>
+            <div style={{ width: '100%', overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', border: '1px solid #ddd' }}>
+                    <thead>
+                        <tr>
+                            <th style={{ padding: '10px', textAlign: 'center' }}>ID</th>
+                            <th style={{ padding: '10px', textAlign: 'center' }}>Nombre de la Empresa</th>
+                            <th style={{ padding: '10px', textAlign: 'center' }}>Nombre del Contacto</th>
+                            <th style={{ padding: '10px', textAlign: 'center' }}>Número de Teléfono</th>
+                            <th style={{ padding: '10px', textAlign: 'center' }}>Correo Electrónico</th>
+                            <th style={{ padding: '10px', textAlign: 'center' }}>País</th>
+                            <th style={{ padding: '10px', textAlign: 'center' }}>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {rows.map((row) => (
+                            <tr key={row.id} style={{ borderBottom: '1px solid #ddd' }}>
+                                <td style={{ padding: '10px', textAlign: 'center' }}>{row.id}</td>
+                                <td style={{ padding: '10px', textAlign: 'center' }}>{row.companyName}</td>
+                                <td style={{ padding: '10px', textAlign: 'center' }}>{row.contactName}</td>
+                                <td style={{ padding: '10px', textAlign: 'center' }}>{row.phoneNumber}</td>
+                                <td style={{ padding: '10px', textAlign: 'center' }}>{row.email}</td>
+                                <td style={{ padding: '10px', textAlign: 'center' }}>{row.country}</td>
+                                <td style={{ padding: '10px', textAlign: 'center' }}>
+                                    <Button onClick={() => handleEdit(row)} color="primary" size="small" startIcon={<EditIcon />}>
+                                        Editar
+                                    </Button>
+                                    <Button onClick={() => handleDelete(row.id)} color="secondary" size="small" startIcon={<DeleteIcon />}>
+                                        Eliminar
+                                    </Button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
 
             {/* Modal para agregar o editar proveedor */}
             <Modal open={open} onClose={handleClose}>
@@ -158,7 +144,7 @@ export default function DataTable() {
                     top: '50%',
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
-                    width: 400,
+                    width: { xs: '90%', sm: 400 },
                     bgcolor: 'background.paper',
                     p: 4,
                     boxShadow: 24,

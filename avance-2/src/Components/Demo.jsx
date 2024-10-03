@@ -38,6 +38,8 @@ import { Bar } from 'react-chartjs-2';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { Paper } from '@mui/material';
 import 'leaflet/dist/leaflet.css';
+import Dashboard from './Dashboard';
+import Perfil from './Perfil';
 
 const NAVIGATION = [
   {
@@ -93,7 +95,7 @@ const NAVIGATION = [
       },
     ],
   },
-  
+
   {
     kind: 'divider',
   },
@@ -124,13 +126,8 @@ const NAVIGATION = [
     icon: <AnalyticsIcon />,
   },
   {
-    segment: 'integration2',
-    title: 'Proveedores',
-    icon: <LayersIcon />,
-  },
-  {
-    segment: 'integration3',
-    title: 'Cuentas de Usuario',
+    segment: 'OpcionesUsuario',
+    title: 'Opciones de Usuario',
     icon: <ManageAccountsIcon />,
   },
 ];
@@ -191,9 +188,36 @@ function DashboardLayoutBasic(props) {
   // Remove this const when copying and pasting into your project.
   const demoWindow = window !== undefined ? window() : undefined;
 
+  const [session, setSession] = React.useState({
+    user: {
+      name: 'Bharat Kashyap',
+      email: 'bharatkashyap@outlook.com',
+      image: 'https://avatars.githubusercontent.com/u/19550456',
+    },
+  });
+
+  const authentication = React.useMemo(() => {
+    return {
+      signIn: () => {
+        setSession({
+          user: {
+            name: 'Bharat Kashyap',
+            email: 'bharatkashyap@outlook.com',
+            image: 'https://avatars.githubusercontent.com/u/19550456',
+          },
+        });
+      },
+      signOut: () => {
+        setSession(null);
+      },
+    };
+  }, []);
+
   return (
     // preview-start
     <AppProvider
+      session={session}
+      authentication={authentication}
       navigation={NAVIGATION}
       branding={{
         title: 'Phanthom Admin',
@@ -221,8 +245,7 @@ DashboardLayoutBasic.propTypes = {
 function DashboardContent() {
   return (
     <Box>
-      <Typography variant="h4">Dashboard</Typography>
-      <Typography>Welcome to the Dashboard section.</Typography>
+      <Dashboard />
     </Box>
   );
 }
@@ -275,11 +298,10 @@ function ProductosMasVendidosContent() {
   );
 }
 
-function ReportsContent() {
+function PerfilContent() {
   return (
     <Box>
-      <Typography variant="h4">Reports</Typography>
-      <Typography>Welcome to the Reports section.</Typography>
+      <Perfil />
     </Box>
   );
 }
@@ -390,34 +412,34 @@ function SupplierAnalysisContent() {
   };
 
   const cities = [
-    { name: "San Miguel", lat: -12.076707905159928, lng: -77.08220316931151},
-    { name: "Jockey Plaza", lat: -12.086138940532926, lng: -76.97773028836062},
-    { name: "Tienda Puruchuco", lat: -12.038261121591061, lng: -76.931977},
-    { name: "Centro Cívico", lat: -12.056296789316637, lng: -77.03736445767214},
-    { name: "Santa Anita", lat: -12.056555742676238, lng: -76.97079091534425},
-    { name: "Mall del Sur", lat: -12.154595885398011, lng: -76.98209708465576},
-    { name: "Plaza Norte", lat: -12.00666272941323, lng: -77.06025737301637},
-    { name: "Tienda Salaverry", lat: -12.08958170976282, lng: -77.05257378922079},
-    { name: "Tienda Larcomar", lat: -12.131573898590519, lng: -77.03048408465575},
-    { name: "La Rambla San Borja", lat: -12.088339781264985, lng: -77.00486208465574},
-    { name: "Tienda Mega Plaza", lat: -11.994054667086134, lng: -77.06179},
-    { name: "Trujillo", lat: -8.10195375197262, lng: -79.04804391534425},
-    { name: "Piura", lat: -5.1819285457517195, lng: -80.62224545767214},
-    { name: "Cuzco", lat: -13.52383347080274, lng: -71.95047836441803},
-    { name: "Chimbote", lat: -9.10210215663841, lng: -78.55790054232787},
-    { name: "Chiclayo", lat: -6.777715807444322, lng: -79.83260716931152},
-    { name: "Arequipa", lat: -16.389912750397254, lng: -71.54656345767214},
-    { name: "Arequipa", lat: -16.417291542969267, lng: -71.51377600000002},
+    { name: "San Miguel", lat: -12.076707905159928, lng: -77.08220316931151 },
+    { name: "Jockey Plaza", lat: -12.086138940532926, lng: -76.97773028836062 },
+    { name: "Tienda Puruchuco", lat: -12.038261121591061, lng: -76.931977 },
+    { name: "Centro Cívico", lat: -12.056296789316637, lng: -77.03736445767214 },
+    { name: "Santa Anita", lat: -12.056555742676238, lng: -76.97079091534425 },
+    { name: "Mall del Sur", lat: -12.154595885398011, lng: -76.98209708465576 },
+    { name: "Plaza Norte", lat: -12.00666272941323, lng: -77.06025737301637 },
+    { name: "Tienda Salaverry", lat: -12.08958170976282, lng: -77.05257378922079 },
+    { name: "Tienda Larcomar", lat: -12.131573898590519, lng: -77.03048408465575 },
+    { name: "La Rambla San Borja", lat: -12.088339781264985, lng: -77.00486208465574 },
+    { name: "Tienda Mega Plaza", lat: -11.994054667086134, lng: -77.06179 },
+    { name: "Trujillo", lat: -8.10195375197262, lng: -79.04804391534425 },
+    { name: "Piura", lat: -5.1819285457517195, lng: -80.62224545767214 },
+    { name: "Cuzco", lat: -13.52383347080274, lng: -71.95047836441803 },
+    { name: "Chimbote", lat: -9.10210215663841, lng: -78.55790054232787 },
+    { name: "Chiclayo", lat: -6.777715807444322, lng: -79.83260716931152 },
+    { name: "Arequipa", lat: -16.389912750397254, lng: -71.54656345767214 },
+    { name: "Arequipa", lat: -16.417291542969267, lng: -71.51377600000002 },
   ];
 
   return (
     <Box>
-        <Typography variant="h4" sx={{ mb: 4, textAlign: 'center', fontWeight: 'bold', mt: 2}}>Análisis de Proveedores y Métricas Clave</Typography>
+      <Typography variant="h4" sx={{ mb: 4, textAlign: 'center', fontWeight: 'bold', mt: 2 }}>Análisis de Proveedores y Métricas Clave</Typography>
 
       {/* Grid de tarjetas */}
       <Grid container spacing={2}>
         <Grid item xs={12} md={3}>
-          <Card sx={{ m:2}}>
+          <Card sx={{ m: 2 }}>
             <CardContent>
               <Typography variant="h6">Visitantes</Typography>
               <Typography variant="h4">2,540</Typography>
@@ -425,7 +447,7 @@ function SupplierAnalysisContent() {
           </Card>
         </Grid>
         <Grid item xs={12} md={3}>
-        <Card sx={{ m:2}}>
+          <Card sx={{ m: 2 }}>
             <CardContent>
               <Typography variant="h6">Actividad</Typography>
               <Typography variant="h4">1,200</Typography>
@@ -433,7 +455,7 @@ function SupplierAnalysisContent() {
           </Card>
         </Grid>
         <Grid item xs={12} md={3}>
-        <Card sx={{ m:2}}>
+          <Card sx={{ m: 2 }}>
             <CardContent>
               <Typography variant="h6">Tiempo Real</Typography>
               <Typography variant="h4">50</Typography>
@@ -441,7 +463,7 @@ function SupplierAnalysisContent() {
           </Card>
         </Grid>
         <Grid item xs={12} md={3}>
-        <Card sx={{ m:2}}>
+          <Card sx={{ m: 2 }}>
             <CardContent>
               <Typography variant="h6">Tasa de Rebote</Typography>
               <Typography variant="h4">35%</Typography>
@@ -451,65 +473,65 @@ function SupplierAnalysisContent() {
       </Grid>
 
       {/* Gráfico de barras */}
-<Typography variant="h5" gutterBottom sx={{ m: 2 }}>
-  Actividad por Mes
-</Typography>
+      <Typography variant="h5" gutterBottom sx={{ m: 2 }}>
+        Actividad por Mes
+      </Typography>
 
-<Box sx={{ p: 3, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-  <Paper 
-    sx={{ 
-      width: '80%', 
-      p: 2, 
-      borderRadius: '8px', // Bordes redondeados
-      boxShadow: 3 // Sombra opcional
-    }}
-  >
-    <Box sx={{ height: '400px', width: '100%' }}> {/* Ajustar altura */}
-      <Bar
-        data={barData}
-        options={{
-          responsive: true, // Hace el gráfico adaptable
-          maintainAspectRatio: false, // Permite ajustar la altura sin distorsión
-          scales: {
-            y: {
-              beginAtZero: true,
-              ticks: {
-                callback: function (value) {
-                  return value + ' unidades'; // Añadir texto a las etiquetas
+      <Box sx={{ p: 3, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Paper
+          sx={{
+            width: '80%',
+            p: 2,
+            borderRadius: '8px', // Bordes redondeados
+            boxShadow: 3 // Sombra opcional
+          }}
+        >
+          <Box sx={{ height: '400px', width: '100%' }}> {/* Ajustar altura */}
+            <Bar
+              data={barData}
+              options={{
+                responsive: true, // Hace el gráfico adaptable
+                maintainAspectRatio: false, // Permite ajustar la altura sin distorsión
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    ticks: {
+                      callback: function (value) {
+                        return value + ' unidades'; // Añadir texto a las etiquetas
+                      },
+                    },
+                  },
                 },
-              },
-            },
-          },
-        }}
-      />
-    </Box>
-  </Paper>
-</Box>
+              }}
+            />
+          </Box>
+        </Paper>
+      </Box>
 
 
-     {/* Mapa */}
-<Box mt={4} sx={{ m: 3 }}> {/* Agregar margen en todos los lados */}
-  <Typography variant="h5" gutterBottom sx={{ m: 2 }}>
-    Tiendas Phantom en Perú
-  </Typography>
+      {/* Mapa */}
+      <Box mt={4} sx={{ m: 3 }}> {/* Agregar margen en todos los lados */}
+        <Typography variant="h5" gutterBottom sx={{ m: 2 }}>
+          Tiendas Phantom en Perú
+        </Typography>
 
-  <MapContainer 
-    center={[-9.19, -75.0152]} 
-    zoom={5} 
-    style={{ height: "400px", width: "100%" }}
-  >
-    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-    {cities.map((city, index) => (
-      <Marker key={index} position={[city.lat, city.lng]}>
-        <Popup>{city.name}</Popup>
-      </Marker>
-    ))}
-  </MapContainer>
-</Box>
+        <MapContainer
+          center={[-9.19, -75.0152]}
+          zoom={5}
+          style={{ height: "400px", width: "100%" }}
+        >
+          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          {cities.map((city, index) => (
+            <Marker key={index} position={[city.lat, city.lng]}>
+              <Popup>{city.name}</Popup>
+            </Marker>
+          ))}
+        </MapContainer>
+      </Box>
 
       {/* Lista de Proveedores */}
       <Box mt={4}>
-        <Typography variant="h5" gutterBottom sx={{ m:2}}>Análisis de Proveedores</Typography>
+        <Typography variant="h5" gutterBottom sx={{ m: 2 }}>Análisis de Proveedores</Typography>
         <List>
           {suppliers.map((supplier, index) => (
             <React.Fragment key={index}>
@@ -555,8 +577,8 @@ function DemoPageContent({ pathname }) {
       return <TrafficContent />; // Preguntas Frecuentes
     case '/integration1':
       return <SupplierAnalysisContent />; // Análisis de Proveedores
-    case '/integration2':
-      return <UserAccountsContent />; // Cuentas de Usuario
+    case '/OpcionesUsuario':
+      return <PerfilContent />; // Cuentas de Usuario
     case '/reports':
       return <ReportsContent />;
     default:

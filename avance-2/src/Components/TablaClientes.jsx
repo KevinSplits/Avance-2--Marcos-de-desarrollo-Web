@@ -1,68 +1,34 @@
 import React, { useState } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
-import { Box, Button, Modal, TextField, Grid, Typography, Paper, IconButton } from '@mui/material';
+import { Box, Button, Modal, TextField, Grid, Typography, Paper } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 
-const initialColumns = (handleDelete, handleEdit) => [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'clientName', headerName: 'Nombre del Cliente', width: 200 },
-    { field: 'address', headerName: 'Dirección', width: 250 },
-    { field: 'email', headerName: 'Correo Electrónico', width: 200 },
-    { field: 'phone', headerName: 'Teléfono', width: 150 },
-    {
-        field: 'actions',
-        headerName: 'Acciones',
-        width: 180,
-        renderCell: (params) => (
-            <div>
-                <IconButton onClick={() => handleEdit(params.row)} color="primary">
-                    <EditIcon />
-                </IconButton>
-                <IconButton onClick={() => handleDelete(params.row.id)} color="secondary">
-                    <DeleteIcon />
-                </IconButton>
-            </div>
-        ),
-    },
-];
-
 const initialRows = [
-    { id: 1, clientName: 'Juan Pérez', address: 'Calle Falsa 123', email: 'juan.perez@gmail.com', phone: '555-1234' },
-    { id: 2, clientName: 'Maria Gómez', address: 'Av. Siempre Viva 742', email: 'maria.gomez@hotmail.com', phone: '555-5678' },
-    { id: 3, clientName: 'Carlos Herrera', address: 'Carrera 50 #34-90', email: 'carlos.herrera@yahoo.com', phone: '555-9876' },
-    { id: 4, clientName: 'Ana Torres', address: 'Boulevard de los Sueños 101', email: 'ana.torres@empresa.com', phone: '555-2468' },
-    { id: 5, clientName: 'Luis Ramírez', address: 'Paseo de la Reforma 999', email: 'luis.ramirez@outlook.com', phone: '555-1357' },
+    { id: 1, name: 'Juan Pérez', email: 'juan.perez@example.com', phone: '555-1234', address: 'Calle Falsa 123' },
+    { id: 2, name: 'María García', email: 'maria.garcia@example.com', phone: '555-5678', address: 'Avenida Siempre Viva 742' },
+    { id: 3, name: 'Carlos López', email: 'carlos.lopez@example.com', phone: '555-8765', address: 'Paseo del Parque 45' },
 ];
 
-const paginationModel = { page: 0, pageSize: 10 };
-
-const localeText = {
-    noRowsLabel: "No se han encontrado datos.",
-    toolbarColumns: "Columnas",
-    paginationRowsPerPage: "Filas por página:",
-};
-
-export default function ClientsTable() {
+export default function ClientesTable() {
     const [rows, setRows] = useState(initialRows);
     const [open, setOpen] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [selectedClient, setSelectedClient] = useState(null);
     const [clientData, setClientData] = useState({
-        clientName: '',
-        address: '',
+        name: '',
         email: '',
         phone: '',
+        address: '',
     });
 
     const handleOpen = () => {
         setEditMode(false);
         setClientData({
-            clientName: '',
-            address: '',
+            name: '',
             email: '',
             phone: '',
+            address: '',
         });
         setOpen(true);
     };
@@ -116,12 +82,12 @@ export default function ClientsTable() {
                 minHeight: '100vh',
                 textAlign: 'center',
                 mt: 2,
+                px: { xs: 2, md: 3 },
             }}
         >
-            {/* Título y botón "Agregar Cliente" */}
-            <Grid container justifyContent="space-between" alignItems="center" sx={{ width: '80%', mb: 2 }}>
+            <Grid container justifyContent="space-between" alignItems="center" sx={{ width: '100%', mb: 2 }}>
                 <Grid item>
-                    <Typography variant="h4">
+                    <Typography variant="h4" sx={{ fontSize: { xs: '1.5rem', md: '2rem' } }}>
                         Clientes
                     </Typography>
                 </Grid>
@@ -132,15 +98,40 @@ export default function ClientsTable() {
                 </Grid>
             </Grid>
 
-            <Paper sx={{ height: 'auto', width: '80%', overflow: 'hidden' }}>
-                <DataGrid
-                    rows={rows}
-                    columns={initialColumns(handleDelete, handleEdit)}
-                    initialState={{ pagination: { paginationModel } }}
-                    pageSizeOptions={[10]}
-                    localeText={localeText}
-                    sx={{ border: 0, overflow: 'hidden' }}
-                />
+            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+                <div style={{ width: '100%', overflowX: 'auto' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse', border: '1px solid #ddd' }}>
+                        <thead>
+                            <tr>
+                                <th style={{ padding: '10px', textAlign: 'center' }}>ID</th>
+                                <th style={{ padding: '10px', textAlign: 'center' }}>Nombre</th>
+                                <th style={{ padding: '10px', textAlign: 'center' }}>Email</th>
+                                <th style={{ padding: '10px', textAlign: 'center' }}>Teléfono</th>
+                                <th style={{ padding: '10px', textAlign: 'center' }}>Dirección</th>
+                                <th style={{ padding: '10px', textAlign: 'center' }}>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {rows.map((row) => (
+                                <tr key={row.id} style={{ borderBottom: '1px solid #ddd' }}>
+                                    <td style={{ padding: '10px', textAlign: 'center' }}>{row.id}</td>
+                                    <td style={{ padding: '10px', textAlign: 'center' }}>{row.name}</td>
+                                    <td style={{ padding: '10px', textAlign: 'center' }}>{row.email}</td>
+                                    <td style={{ padding: '10px', textAlign: 'center' }}>{row.phone}</td>
+                                    <td style={{ padding: '10px', textAlign: 'center' }}>{row.address}</td>
+                                    <td style={{ padding: '10px', textAlign: 'center' }}>
+                                        <Button onClick={() => handleEdit(row)} color="primary" size="small" startIcon={<EditIcon />}>
+                                            Editar
+                                        </Button>
+                                        <Button onClick={() => handleDelete(row.id)} color="secondary" size="small" startIcon={<DeleteIcon />}>
+                                            Eliminar
+                                        </Button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </Paper>
 
             {/* Modal para agregar o editar cliente */}
@@ -150,7 +141,7 @@ export default function ClientsTable() {
                     top: '50%',
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
-                    width: 400,
+                    width: { xs: '90%', sm: 400 },
                     bgcolor: 'background.paper',
                     p: 4,
                     boxShadow: 24,
@@ -162,25 +153,16 @@ export default function ClientsTable() {
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <TextField
-                                label="Nombre del Cliente"
+                                label="Nombre"
                                 fullWidth
-                                name="clientName"
-                                value={clientData.clientName}
+                                name="name"
+                                value={clientData.name}
                                 onChange={handleInputChange}
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
-                                label="Dirección"
-                                fullWidth
-                                name="address"
-                                value={clientData.address}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                label="Correo Electrónico"
+                                label="Email"
                                 fullWidth
                                 name="email"
                                 value={clientData.email}
@@ -193,6 +175,15 @@ export default function ClientsTable() {
                                 fullWidth
                                 name="phone"
                                 value={clientData.phone}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                label="Dirección"
+                                fullWidth
+                                name="address"
+                                value={clientData.address}
                                 onChange={handleInputChange}
                             />
                         </Grid>

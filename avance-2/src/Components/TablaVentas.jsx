@@ -1,33 +1,8 @@
 import React, { useState } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
-import { Box, Button, Modal, TextField, Grid, Typography, Paper, IconButton } from '@mui/material';
+import { Box, Button, Modal, TextField, Grid, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
-
-const initialColumns = (handleDelete, handleEdit) => [
-    { field: 'id', headerName: 'ID Venta', width: 100 },
-    { field: 'clientName', headerName: 'Nombre del Cliente', width: 200 },
-    { field: 'product', headerName: 'Producto', width: 200 },
-    { field: 'quantity', headerName: 'Cantidad', width: 130 },
-    { field: 'price', headerName: 'Precio Unitario', width: 150, valueFormatter: ({ value }) => `$${value}` },
-    { field: 'total', headerName: 'Total', width: 150, valueFormatter: ({ value }) => `$${value}` },
-    {
-        field: 'actions',
-        headerName: 'Acciones',
-        width: 180,
-        renderCell: (params) => (
-            <div>
-                <IconButton onClick={() => handleEdit(params.row)} color="primary">
-                    <EditIcon />
-                </IconButton>
-                <IconButton onClick={() => handleDelete(params.row.id)} color="secondary">
-                    <DeleteIcon />
-                </IconButton>
-            </div>
-        ),
-    },
-];
 
 const initialRows = [
     { id: 1, clientName: 'Juan Pérez', product: 'Laptop', quantity: 2, price: 500, total: 1000 },
@@ -36,14 +11,6 @@ const initialRows = [
     { id: 4, clientName: 'Ana Torres', product: 'Teclado', quantity: 5, price: 30, total: 150 },
     { id: 5, clientName: 'Luis Ramírez', product: 'Ratón', quantity: 4, price: 25, total: 100 },
 ];
-
-const paginationModel = { page: 0, pageSize: 10 };
-
-const localeText = {
-    noRowsLabel: "No se han encontrado datos.",
-    toolbarColumns: "Columnas",
-    paginationRowsPerPage: "Filas por página:",
-};
 
 export default function SalesTable() {
     const [rows, setRows] = useState(initialRows);
@@ -77,7 +44,7 @@ export default function SalesTable() {
         setSaleData((prevData) => ({
             ...prevData,
             [name]: value,
-            total: prevData.quantity * prevData.price,
+            total: name === 'quantity' || name === 'price' ? prevData.quantity * prevData.price : prevData.total,
         }));
     };
 
@@ -120,12 +87,13 @@ export default function SalesTable() {
                 minHeight: '100vh',
                 textAlign: 'center',
                 mt: 2,
+                px: { xs: 2, md: 3 },
             }}
         >
             {/* Título y botón "Agregar Venta" */}
             <Grid container justifyContent="space-between" alignItems="center" sx={{ width: '80%', mb: 2 }}>
                 <Grid item>
-                    <Typography variant="h4">
+                    <Typography variant="h4" sx={{ fontSize: { xs: '1.5rem', md: '2rem' } }}>
                         Ventas
                     </Typography>
                 </Grid>
@@ -136,16 +104,42 @@ export default function SalesTable() {
                 </Grid>
             </Grid>
 
-            <Paper sx={{ height: 'auto', width: '80%', overflow: 'hidden' }}>
-                <DataGrid
-                    rows={rows}
-                    columns={initialColumns(handleDelete, handleEdit)}
-                    initialState={{ pagination: { paginationModel } }}
-                    pageSizeOptions={[10]}
-                    localeText={localeText}
-                    sx={{ border: 0, overflow: 'hidden' }}
-                />
-            </Paper>
+            {/* Tabla Simple */}
+            <div style={{ width: '80%', overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', border: '1px solid #ddd' }}>
+                    <thead>
+                        <tr>
+                            <th style={{ padding: '10px', textAlign: 'center' }}>ID Venta</th>
+                            <th style={{ padding: '10px', textAlign: 'center' }}>Nombre del Cliente</th>
+                            <th style={{ padding: '10px', textAlign: 'center' }}>Producto</th>
+                            <th style={{ padding: '10px', textAlign: 'center' }}>Cantidad</th>
+                            <th style={{ padding: '10px', textAlign: 'center' }}>Precio Unitario</th>
+                            <th style={{ padding: '10px', textAlign: 'center' }}>Total</th>
+                            <th style={{ padding: '10px', textAlign: 'center' }}>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {rows.map((row) => (
+                            <tr key={row.id} style={{ borderBottom: '1px solid #ddd' }}>
+                                <td style={{ padding: '10px', textAlign: 'center' }}>{row.id}</td>
+                                <td style={{ padding: '10px', textAlign: 'center' }}>{row.clientName}</td>
+                                <td style={{ padding: '10px', textAlign: 'center' }}>{row.product}</td>
+                                <td style={{ padding: '10px', textAlign: 'center' }}>{row.quantity}</td>
+                                <td style={{ padding: '10px', textAlign: 'center' }}>${row.price}</td>
+                                <td style={{ padding: '10px', textAlign: 'center' }}>${row.total}</td>
+                                <td style={{ padding: '10px', textAlign: 'center' }}>
+                                    <Button onClick={() => handleEdit(row)} color="primary" size="small" startIcon={<EditIcon />}>
+                                        Editar
+                                    </Button>
+                                    <Button onClick={() => handleDelete(row.id)} color="secondary" size="small" startIcon={<DeleteIcon />}>
+                                        Eliminar
+                                    </Button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
 
             {/* Modal para agregar o editar venta */}
             <Modal open={open} onClose={handleClose}>

@@ -1,48 +1,16 @@
 import React, { useState } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
-import { Box, Button, Modal, TextField, Grid, Typography, Paper, IconButton } from '@mui/material';
+import { Box, Button, Modal, TextField, Grid, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 
-const initialColumns = (handleDelete, handleEdit) => [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'gameTitle', headerName: 'Título', width: 200 },
-    { field: 'description', headerName: 'Descripción', width: 300 },
-    { field: 'console', headerName: 'Consola', width: 150 },
-    { field: 'price', headerName: 'Precio', width: 100 },
-    {
-        field: 'actions',
-        headerName: 'Acciones',
-        width: 180,
-        renderCell: (params) => (
-            <div>
-                <IconButton onClick={() => handleEdit(params.row)} color="primary">
-                    <EditIcon />
-                </IconButton>
-                <IconButton onClick={() => handleDelete(params.row.id)} color="secondary">
-                    <DeleteIcon />
-                </IconButton>
-            </div>
-        ),
-    },
-];
-
 const initialRows = [
-    { id: 1, gameTitle: 'The Legend of Zelda', description: 'Aventura épica en Hyrule', console: 'Nintendo Switch', price: '$59.99' },
-    { id: 2, gameTitle: 'God of War', description: 'Kratos lucha contra los dioses', console: 'PlayStation 5', price: '$69.99' },
-    { id: 3, gameTitle: 'Halo Infinite', description: 'Acción en primera persona en el universo Halo', console: 'Xbox Series X', price: '$59.99' },
-    { id: 4, gameTitle: 'Cyberpunk 2077', description: 'Futuro distópico en Night City', console: 'PC', price: '$49.99' },
-    { id: 5, gameTitle: 'Super Mario Odyssey', description: 'Aventura de plataformas con Mario', console: 'Nintendo Switch', price: '$59.99' },
+    { id: 1, title: 'The Legend of Zelda', genre: 'Aventura', platform: 'Nintendo', releaseDate: '1986-02-21', price: 59.99 },
+    { id: 2, title: 'Super Mario Bros', genre: 'Plataforma', platform: 'Nintendo', releaseDate: '1985-09-13', price: 49.99 },
+    { id: 3, title: 'Final Fantasy VII', genre: 'RPG', platform: 'PlayStation', releaseDate: '1997-01-31', price: 39.99 },
+    { id: 4, title: 'The Witcher 3', genre: 'RPG', platform: 'PC', releaseDate: '2015-05-19', price: 29.99 },
+    { id: 5, title: 'Overwatch', genre: 'Shooter', platform: 'PC', releaseDate: '2016-05-24', price: 39.99 },
 ];
-
-const paginationModel = { page: 0, pageSize: 10 };
-
-const localeText = {
-    noRowsLabel: "No se han encontrado datos.",
-    toolbarColumns: "Columnas",
-    paginationRowsPerPage: "Filas por página:",
-};
 
 export default function VideoGamesTable() {
     const [rows, setRows] = useState(initialRows);
@@ -50,18 +18,20 @@ export default function VideoGamesTable() {
     const [editMode, setEditMode] = useState(false);
     const [selectedGame, setSelectedGame] = useState(null);
     const [gameData, setGameData] = useState({
-        gameTitle: '',
-        description: '',
-        console: '',
+        title: '',
+        genre: '',
+        platform: '',
+        releaseDate: '',
         price: '',
     });
 
     const handleOpen = () => {
         setEditMode(false);
         setGameData({
-            gameTitle: '',
-            description: '',
-            console: '',
+            title: '',
+            genre: '',
+            platform: '',
+            releaseDate: '',
             price: '',
         });
         setOpen(true);
@@ -116,12 +86,12 @@ export default function VideoGamesTable() {
                 minHeight: '100vh',
                 textAlign: 'center',
                 mt: 2,
+                px: { xs: 2, md: 3 },
             }}
         >
-            {/* Título y botón "Agregar Videojuego" */}
-            <Grid container justifyContent="space-between" alignItems="center" sx={{ width: '80%', mb: 2 }}>
+            <Grid container justifyContent="space-between" alignItems="center" sx={{ width: '100%', mb: 2 }}>
                 <Grid item>
-                    <Typography variant="h4">
+                    <Typography variant="h4" sx={{ fontSize: { xs: '1.5rem', md: '2rem' } }}>
                         Videojuegos
                     </Typography>
                 </Grid>
@@ -132,16 +102,41 @@ export default function VideoGamesTable() {
                 </Grid>
             </Grid>
 
-            <Paper sx={{ height: 'auto', width: '80%', overflow: 'hidden' }}>
-                <DataGrid
-                    rows={rows}
-                    columns={initialColumns(handleDelete, handleEdit)}
-                    initialState={{ pagination: { paginationModel } }}
-                    pageSizeOptions={[10]}
-                    localeText={localeText}
-                    sx={{ border: 0, overflow: 'hidden' }}
-                />
-            </Paper>
+            <div style={{ width: '100%', overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', border: '1px solid #ddd' }}>
+                    <thead>
+                        <tr>
+                            <th style={{ padding: '10px', textAlign: 'center' }}>ID</th>
+                            <th style={{ padding: '10px', textAlign: 'center' }}>Título</th>
+                            <th style={{ padding: '10px', textAlign: 'center' }}>Género</th>
+                            <th style={{ padding: '10px', textAlign: 'center' }}>Plataforma</th>
+                            <th style={{ padding: '10px', textAlign: 'center' }}>Fecha de Lanzamiento</th>
+                            <th style={{ padding: '10px', textAlign: 'center' }}>Precio</th>
+                            <th style={{ padding: '10px', textAlign: 'center' }}>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {rows.map((row) => (
+                            <tr key={row.id} style={{ borderBottom: '1px solid #ddd' }}>
+                                <td style={{ padding: '10px', textAlign: 'center' }}>{row.id}</td>
+                                <td style={{ padding: '10px', textAlign: 'center' }}>{row.title}</td>
+                                <td style={{ padding: '10px', textAlign: 'center' }}>{row.genre}</td>
+                                <td style={{ padding: '10px', textAlign: 'center' }}>{row.platform}</td>
+                                <td style={{ padding: '10px', textAlign: 'center' }}>{row.releaseDate}</td>
+                                <td style={{ padding: '10px', textAlign: 'center' }}>${row.price.toFixed(2)}</td>
+                                <td style={{ padding: '10px', textAlign: 'center' }}>
+                                    <Button onClick={() => handleEdit(row)} color="primary" size="small" startIcon={<EditIcon />}>
+                                        Editar
+                                    </Button>
+                                    <Button onClick={() => handleDelete(row.id)} color="secondary" size="small" startIcon={<DeleteIcon />}>
+                                        Eliminar
+                                    </Button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
 
             {/* Modal para agregar o editar videojuego */}
             <Modal open={open} onClose={handleClose}>
@@ -150,7 +145,7 @@ export default function VideoGamesTable() {
                     top: '50%',
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
-                    width: 400,
+                    width: { xs: '90%', sm: 400 },
                     bgcolor: 'background.paper',
                     p: 4,
                     boxShadow: 24,
@@ -164,26 +159,37 @@ export default function VideoGamesTable() {
                             <TextField
                                 label="Título"
                                 fullWidth
-                                name="gameTitle"
-                                value={gameData.gameTitle}
+                                name="title"
+                                value={gameData.title}
                                 onChange={handleInputChange}
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
-                                label="Descripción"
+                                label="Género"
                                 fullWidth
-                                name="description"
-                                value={gameData.description}
+                                name="genre"
+                                value={gameData.genre}
                                 onChange={handleInputChange}
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
-                                label="Consola"
+                                label="Plataforma"
                                 fullWidth
-                                name="console"
-                                value={gameData.console}
+                                name="platform"
+                                value={gameData.platform}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                label="Fecha de Lanzamiento"
+                                fullWidth
+                                name="releaseDate"
+                                type="date"
+                                InputLabelProps={{ shrink: true }}
+                                value={gameData.releaseDate}
                                 onChange={handleInputChange}
                             />
                         </Grid>
@@ -192,6 +198,7 @@ export default function VideoGamesTable() {
                                 label="Precio"
                                 fullWidth
                                 name="price"
+                                type="number"
                                 value={gameData.price}
                                 onChange={handleInputChange}
                             />
