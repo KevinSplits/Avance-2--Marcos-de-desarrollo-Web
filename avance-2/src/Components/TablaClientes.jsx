@@ -7,10 +7,10 @@ import AddIcon from '@mui/icons-material/Add';
 
 const initialColumns = (handleDelete, handleEdit) => [
     { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'gameTitle', headerName: 'Título', width: 200 },
-    { field: 'description', headerName: 'Descripción', width: 300 },
-    { field: 'console', headerName: 'Consola', width: 150 },
-    { field: 'price', headerName: 'Precio', width: 100 },
+    { field: 'clientName', headerName: 'Nombre del Cliente', width: 200 },
+    { field: 'address', headerName: 'Dirección', width: 250 },
+    { field: 'email', headerName: 'Correo Electrónico', width: 200 },
+    { field: 'phone', headerName: 'Teléfono', width: 150 },
     {
         field: 'actions',
         headerName: 'Acciones',
@@ -29,11 +29,11 @@ const initialColumns = (handleDelete, handleEdit) => [
 ];
 
 const initialRows = [
-    { id: 1, gameTitle: 'The Legend of Zelda', description: 'Aventura épica en Hyrule', console: 'Nintendo Switch', price: '$59.99' },
-    { id: 2, gameTitle: 'God of War', description: 'Kratos lucha contra los dioses', console: 'PlayStation 5', price: '$69.99' },
-    { id: 3, gameTitle: 'Halo Infinite', description: 'Acción en primera persona en el universo Halo', console: 'Xbox Series X', price: '$59.99' },
-    { id: 4, gameTitle: 'Cyberpunk 2077', description: 'Futuro distópico en Night City', console: 'PC', price: '$49.99' },
-    { id: 5, gameTitle: 'Super Mario Odyssey', description: 'Aventura de plataformas con Mario', console: 'Nintendo Switch', price: '$59.99' },
+    { id: 1, clientName: 'Juan Pérez', address: 'Calle Falsa 123', email: 'juan.perez@gmail.com', phone: '555-1234' },
+    { id: 2, clientName: 'Maria Gómez', address: 'Av. Siempre Viva 742', email: 'maria.gomez@hotmail.com', phone: '555-5678' },
+    { id: 3, clientName: 'Carlos Herrera', address: 'Carrera 50 #34-90', email: 'carlos.herrera@yahoo.com', phone: '555-9876' },
+    { id: 4, clientName: 'Ana Torres', address: 'Boulevard de los Sueños 101', email: 'ana.torres@empresa.com', phone: '555-2468' },
+    { id: 5, clientName: 'Luis Ramírez', address: 'Paseo de la Reforma 999', email: 'luis.ramirez@outlook.com', phone: '555-1357' },
 ];
 
 const paginationModel = { page: 0, pageSize: 10 };
@@ -44,25 +44,25 @@ const localeText = {
     paginationRowsPerPage: "Filas por página:",
 };
 
-export default function VideoGamesTable() {
+export default function ClientsTable() {
     const [rows, setRows] = useState(initialRows);
     const [open, setOpen] = useState(false);
     const [editMode, setEditMode] = useState(false);
-    const [selectedGame, setSelectedGame] = useState(null);
-    const [gameData, setGameData] = useState({
-        gameTitle: '',
-        description: '',
-        console: '',
-        price: '',
+    const [selectedClient, setSelectedClient] = useState(null);
+    const [clientData, setClientData] = useState({
+        clientName: '',
+        address: '',
+        email: '',
+        phone: '',
     });
 
     const handleOpen = () => {
         setEditMode(false);
-        setGameData({
-            gameTitle: '',
-            description: '',
-            console: '',
-            price: '',
+        setClientData({
+            clientName: '',
+            address: '',
+            email: '',
+            phone: '',
         });
         setOpen(true);
     };
@@ -71,25 +71,25 @@ export default function VideoGamesTable() {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setGameData((prevData) => ({
+        setClientData((prevData) => ({
             ...prevData,
             [name]: value,
         }));
     };
 
     const handleSubmit = () => {
-        if (editMode && selectedGame) {
+        if (editMode && selectedClient) {
             setRows((prevRows) =>
                 prevRows.map((row) =>
-                    row.id === selectedGame.id
-                        ? { ...row, ...gameData }
+                    row.id === selectedClient.id
+                        ? { ...row, ...clientData }
                         : row
                 )
             );
         } else {
             setRows((prevRows) => [
                 ...prevRows,
-                { id: prevRows.length + 1, ...gameData },
+                { id: prevRows.length + 1, ...clientData },
             ]);
         }
         handleClose();
@@ -99,9 +99,9 @@ export default function VideoGamesTable() {
         setRows((prevRows) => prevRows.filter((row) => row.id !== id));
     };
 
-    const handleEdit = (game) => {
-        setSelectedGame(game);
-        setGameData(game);
+    const handleEdit = (client) => {
+        setSelectedClient(client);
+        setClientData(client);
         setEditMode(true);
         setOpen(true);
     };
@@ -118,11 +118,11 @@ export default function VideoGamesTable() {
                 mt: 2,
             }}
         >
-            {/* Título y botón "Agregar Videojuego" */}
+            {/* Título y botón "Agregar Cliente" */}
             <Grid container justifyContent="space-between" alignItems="center" sx={{ width: '80%', mb: 2 }}>
                 <Grid item>
                     <Typography variant="h4">
-                        Videojuegos
+                        Clientes
                     </Typography>
                 </Grid>
                 <Grid item>
@@ -143,7 +143,7 @@ export default function VideoGamesTable() {
                 />
             </Paper>
 
-            {/* Modal para agregar o editar videojuego */}
+            {/* Modal para agregar o editar cliente */}
             <Modal open={open} onClose={handleClose}>
                 <Box sx={{
                     position: 'absolute',
@@ -157,42 +157,42 @@ export default function VideoGamesTable() {
                     borderRadius: 2,
                 }}>
                     <Typography variant="h6" gutterBottom>
-                        {editMode ? 'Editar Videojuego' : 'Agregar Nuevo Videojuego'}
+                        {editMode ? 'Editar Cliente' : 'Agregar Nuevo Cliente'}
                     </Typography>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <TextField
-                                label="Título"
+                                label="Nombre del Cliente"
                                 fullWidth
-                                name="gameTitle"
-                                value={gameData.gameTitle}
+                                name="clientName"
+                                value={clientData.clientName}
                                 onChange={handleInputChange}
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
-                                label="Descripción"
+                                label="Dirección"
                                 fullWidth
-                                name="description"
-                                value={gameData.description}
+                                name="address"
+                                value={clientData.address}
                                 onChange={handleInputChange}
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
-                                label="Consola"
+                                label="Correo Electrónico"
                                 fullWidth
-                                name="console"
-                                value={gameData.console}
+                                name="email"
+                                value={clientData.email}
                                 onChange={handleInputChange}
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
-                                label="Precio"
+                                label="Teléfono"
                                 fullWidth
-                                name="price"
-                                value={gameData.price}
+                                name="phone"
+                                value={clientData.phone}
                                 onChange={handleInputChange}
                             />
                         </Grid>

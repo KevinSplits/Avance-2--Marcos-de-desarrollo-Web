@@ -19,14 +19,26 @@ import AnalyticsIcon from '@mui/icons-material/Analytics';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import { List, ListItem, ListItemText} from '@mui/material';
+import { List, ListItem, ListItemText } from '@mui/material';
 import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {Card, CardContent, Grid, Chip } from '@mui/material';
+import { Card, CardContent, Grid, Chip } from '@mui/material';
+import TablaProductos from './TablaProductos';
+import PersonIcon from '@mui/icons-material/Person';
+import TablaClientes from './TablaClientes';
+import TablaVentas from './TablaVentas';
+import ResumenVentas from './ResumenVentas';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import StarIcon from '@mui/icons-material/Star';
+import ProductosMasVendidos from './ProductosMasVendidos'
+import StorefrontIcon from '@mui/icons-material/Storefront';
+import SellIcon from '@mui/icons-material/Sell';
+
+
 const NAVIGATION = [
   {
     kind: 'header',
-    title: 'Main items',
+    title: 'Secciones Principales',
   },
   {
     segment: 'dashboard',
@@ -34,15 +46,50 @@ const NAVIGATION = [
     icon: <DashboardIcon />,
   },
   {
-    segment: 'productos',
-    title: 'Productos',
-    icon: <SportsEsportsIcon />,
+    segment: 'paneldeventas',
+    title: 'Panel de Ventas',
+    icon: <StorefrontIcon />,
+    children: [
+      {
+        segment: 'resumenventas',
+        title: 'ResumenVentas',
+        icon: <EventAvailableIcon />,
+      },
+      {
+        segment: 'productosmasvendidos',
+        title: 'ProductosMasVendidos',
+        icon: <StarIcon />,
+      },
+    ],
   },
   {
-    segment: 'proveedores',
-    title: 'Proveedores',
-    icon: <PeopleAltIcon />,
+    segment: 'gestiondeventas',
+    title: 'Gestión de Ventas',
+    icon: <StorefrontIcon />,
+    children: [
+      {
+        segment: 'proveedores',
+        title: 'Proveedores',
+        icon: <PersonIcon />,
+      },
+      {
+        segment: 'productos',
+        title: 'Productos',
+        icon: <SportsEsportsIcon />,
+      },
+      {
+        segment: 'clientes',
+        title: 'Clientes',
+        icon: <PeopleAltIcon />,
+      },
+      {
+        segment: 'ventas',
+        title: 'Ventas',
+        icon: < ShoppingCartIcon />,
+      },
+    ],
   },
+  
   {
     kind: 'divider',
   },
@@ -179,37 +226,47 @@ function DashboardContent() {
 function ProveedoresContent() {
   return (
     <Box>
-      <TablaProveedor/>
+      <TablaProveedor />
     </Box>
   );
 }
 
-// function ProveedoresContent() {
-//   return (
-//     <Box 
-//       sx={{ 
-//         display: 'flex', 
-//         flexDirection: 'column', 
-//         alignItems: 'center', 
-//         justifyContent: 'center',
-//         minHeight: '100vh', // Esto asegura que la tabla esté centrada verticalmente
-//         textAlign: 'center'
-//       }}
-//     >
-//       <Typography variant="h4" sx={{ mb: 3 }}>
-//         Proveedores
-//       </Typography>
-      
-//       <TablaProveedor /> {/* Aquí está la tabla centrada */}
-//     </Box>
-//   );
-// }
-
-function OrdersContent() {
+function ProductosContent() {
   return (
     <Box>
-      <Typography variant="h4">Orders</Typography>
-      <Typography>Here is the Orders section content.</Typography>
+      <TablaProductos />
+    </Box>
+  );
+}
+
+function ClientesContent() {
+  return (
+    <Box>
+      <TablaClientes />
+    </Box>
+  );
+}
+
+function VentasContent() {
+  return (
+    <Box>
+      <TablaVentas />
+    </Box>
+  );
+}
+
+function ResumenVentasContent() {
+  return (
+    <Box>
+      <ResumenVentas />
+    </Box>
+  );
+}
+
+function ProductosMasVendidosContent() {
+  return (
+    <Box>
+      <ProductosMasVendidos />
     </Box>
   );
 }
@@ -253,7 +310,7 @@ function SalesContent() {
                 <Typography variant="body2" color="textSecondary" gutterBottom>
                   {ticket.description}
                 </Typography>
-                <Chip label={ticket.status} color={getStatusChipColor(ticket.status)} sx={{ mb: 2, mx: 1 , mt: 2}} />
+                <Chip label={ticket.status} color={getStatusChipColor(ticket.status)} sx={{ mb: 2, mx: 1, mt: 2 }} />
                 <Button variant="contained" color="primary">
                   Ver detalles
                 </Button>
@@ -334,10 +391,18 @@ function DemoPageContent({ pathname }) {
   switch (pathname) {
     case '/dashboard':
       return <DashboardContent />;
-    case '/proveedores':
+    case '/paneldeventas/resumenventas':
+      return <ResumenVentasContent />;
+    case '/paneldeventas/productosmasvendidos':
+      return <ProductosMasVendidosContent />;
+    case '/gestiondeventas/proveedores':
       return <ProveedoresContent />;
-    case '/orders':
-      return <OrdersContent />;
+    case '/gestiondeventas/productos':
+      return <ProductosContent />;
+    case '/gestiondeventas/clientes':
+      return <ClientesContent />;
+    case '/gestiondeventas/ventas':
+      return <VentasContent />;
     case '/reports/sales':
       return <SalesContent />; // Centro de Tickets
     case '/reports/traffic':

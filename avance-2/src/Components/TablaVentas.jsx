@@ -6,11 +6,12 @@ import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 
 const initialColumns = (handleDelete, handleEdit) => [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'gameTitle', headerName: 'Título', width: 200 },
-    { field: 'description', headerName: 'Descripción', width: 300 },
-    { field: 'console', headerName: 'Consola', width: 150 },
-    { field: 'price', headerName: 'Precio', width: 100 },
+    { field: 'id', headerName: 'ID Venta', width: 100 },
+    { field: 'clientName', headerName: 'Nombre del Cliente', width: 200 },
+    { field: 'product', headerName: 'Producto', width: 200 },
+    { field: 'quantity', headerName: 'Cantidad', width: 130 },
+    { field: 'price', headerName: 'Precio Unitario', width: 150, valueFormatter: ({ value }) => `$${value}` },
+    { field: 'total', headerName: 'Total', width: 150, valueFormatter: ({ value }) => `$${value}` },
     {
         field: 'actions',
         headerName: 'Acciones',
@@ -29,11 +30,11 @@ const initialColumns = (handleDelete, handleEdit) => [
 ];
 
 const initialRows = [
-    { id: 1, gameTitle: 'The Legend of Zelda', description: 'Aventura épica en Hyrule', console: 'Nintendo Switch', price: '$59.99' },
-    { id: 2, gameTitle: 'God of War', description: 'Kratos lucha contra los dioses', console: 'PlayStation 5', price: '$69.99' },
-    { id: 3, gameTitle: 'Halo Infinite', description: 'Acción en primera persona en el universo Halo', console: 'Xbox Series X', price: '$59.99' },
-    { id: 4, gameTitle: 'Cyberpunk 2077', description: 'Futuro distópico en Night City', console: 'PC', price: '$49.99' },
-    { id: 5, gameTitle: 'Super Mario Odyssey', description: 'Aventura de plataformas con Mario', console: 'Nintendo Switch', price: '$59.99' },
+    { id: 1, clientName: 'Juan Pérez', product: 'Laptop', quantity: 2, price: 500, total: 1000 },
+    { id: 2, clientName: 'Maria Gómez', product: 'Teléfono', quantity: 1, price: 700, total: 700 },
+    { id: 3, clientName: 'Carlos Herrera', product: 'Monitor', quantity: 3, price: 150, total: 450 },
+    { id: 4, clientName: 'Ana Torres', product: 'Teclado', quantity: 5, price: 30, total: 150 },
+    { id: 5, clientName: 'Luis Ramírez', product: 'Ratón', quantity: 4, price: 25, total: 100 },
 ];
 
 const paginationModel = { page: 0, pageSize: 10 };
@@ -44,25 +45,27 @@ const localeText = {
     paginationRowsPerPage: "Filas por página:",
 };
 
-export default function VideoGamesTable() {
+export default function SalesTable() {
     const [rows, setRows] = useState(initialRows);
     const [open, setOpen] = useState(false);
     const [editMode, setEditMode] = useState(false);
-    const [selectedGame, setSelectedGame] = useState(null);
-    const [gameData, setGameData] = useState({
-        gameTitle: '',
-        description: '',
-        console: '',
-        price: '',
+    const [selectedSale, setSelectedSale] = useState(null);
+    const [saleData, setSaleData] = useState({
+        clientName: '',
+        product: '',
+        quantity: 0,
+        price: 0,
+        total: 0,
     });
 
     const handleOpen = () => {
         setEditMode(false);
-        setGameData({
-            gameTitle: '',
-            description: '',
-            console: '',
-            price: '',
+        setSaleData({
+            clientName: '',
+            product: '',
+            quantity: 0,
+            price: 0,
+            total: 0,
         });
         setOpen(true);
     };
@@ -71,25 +74,26 @@ export default function VideoGamesTable() {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setGameData((prevData) => ({
+        setSaleData((prevData) => ({
             ...prevData,
             [name]: value,
+            total: prevData.quantity * prevData.price,
         }));
     };
 
     const handleSubmit = () => {
-        if (editMode && selectedGame) {
+        if (editMode && selectedSale) {
             setRows((prevRows) =>
                 prevRows.map((row) =>
-                    row.id === selectedGame.id
-                        ? { ...row, ...gameData }
+                    row.id === selectedSale.id
+                        ? { ...row, ...saleData }
                         : row
                 )
             );
         } else {
             setRows((prevRows) => [
                 ...prevRows,
-                { id: prevRows.length + 1, ...gameData },
+                { id: prevRows.length + 1, ...saleData },
             ]);
         }
         handleClose();
@@ -99,9 +103,9 @@ export default function VideoGamesTable() {
         setRows((prevRows) => prevRows.filter((row) => row.id !== id));
     };
 
-    const handleEdit = (game) => {
-        setSelectedGame(game);
-        setGameData(game);
+    const handleEdit = (sale) => {
+        setSelectedSale(sale);
+        setSaleData(sale);
         setEditMode(true);
         setOpen(true);
     };
@@ -118,16 +122,16 @@ export default function VideoGamesTable() {
                 mt: 2,
             }}
         >
-            {/* Título y botón "Agregar Videojuego" */}
+            {/* Título y botón "Agregar Venta" */}
             <Grid container justifyContent="space-between" alignItems="center" sx={{ width: '80%', mb: 2 }}>
                 <Grid item>
                     <Typography variant="h4">
-                        Videojuegos
+                        Ventas
                     </Typography>
                 </Grid>
                 <Grid item>
                     <Button variant="contained" color="primary" onClick={handleOpen} startIcon={<AddIcon />}>
-                        Agregar
+                        Agregar Venta
                     </Button>
                 </Grid>
             </Grid>
@@ -143,7 +147,7 @@ export default function VideoGamesTable() {
                 />
             </Paper>
 
-            {/* Modal para agregar o editar videojuego */}
+            {/* Modal para agregar o editar venta */}
             <Modal open={open} onClose={handleClose}>
                 <Box sx={{
                     position: 'absolute',
@@ -157,44 +161,51 @@ export default function VideoGamesTable() {
                     borderRadius: 2,
                 }}>
                     <Typography variant="h6" gutterBottom>
-                        {editMode ? 'Editar Videojuego' : 'Agregar Nuevo Videojuego'}
+                        {editMode ? 'Editar Venta' : 'Agregar Nueva Venta'}
                     </Typography>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <TextField
-                                label="Título"
+                                label="Nombre del Cliente"
                                 fullWidth
-                                name="gameTitle"
-                                value={gameData.gameTitle}
+                                name="clientName"
+                                value={saleData.clientName}
                                 onChange={handleInputChange}
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
-                                label="Descripción"
+                                label="Producto"
                                 fullWidth
-                                name="description"
-                                value={gameData.description}
+                                name="product"
+                                value={saleData.product}
                                 onChange={handleInputChange}
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
-                                label="Consola"
+                                label="Cantidad"
                                 fullWidth
-                                name="console"
-                                value={gameData.console}
+                                type="number"
+                                name="quantity"
+                                value={saleData.quantity}
                                 onChange={handleInputChange}
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
-                                label="Precio"
+                                label="Precio Unitario"
                                 fullWidth
+                                type="number"
                                 name="price"
-                                value={gameData.price}
+                                value={saleData.price}
                                 onChange={handleInputChange}
                             />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography variant="subtitle1">
+                                Total: ${saleData.total}
+                            </Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <Button variant="contained" color="primary" onClick={handleSubmit}>
