@@ -18,6 +18,7 @@ import { GoogleIcon, FacebookIcon, SitemarkIcon } from './CustomIcons';
 import AppTheme from './AppTheme';
 import ColorModeSelect from './ColorModeSelect';
 
+// Estilo personalizado para la tarjeta
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
@@ -26,24 +27,24 @@ const Card = styled(MuiCard)(({ theme }) => ({
   padding: theme.spacing(4),
   gap: theme.spacing(2),
   margin: 'auto',
-  [theme.breakpoints.up('sm')]: {
-    maxWidth: '450px',
-  },
+  maxWidth: '450px',
   boxShadow:
     'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
+  fontFamily: '"Roboto", sans-serif',
+  borderRadius: '12px',
   ...theme.applyStyles('dark', {
     boxShadow:
       'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
   }),
 }));
 
+// Estilo personalizado para el contenedor
 const SignInContainer = styled(Stack)(({ theme }) => ({
   height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
   minHeight: '100%',
-  padding: theme.spacing(2),
-  [theme.breakpoints.up('sm')]: {
-    padding: theme.spacing(4),
-  },
+  padding: theme.spacing(3),
+  backgroundColor: theme.palette.grey[100],
+  fontFamily: '"Roboto", sans-serif',
   '&::before': {
     content: '""',
     display: 'block',
@@ -60,70 +61,15 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
-export default function SignIn(props) {
-  // State hooks remain unchanged
+export default function IniciarSesion(props) {
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const [open, setOpen] = React.useState(false);
 
-  // Handle dialog open and close remain unchanged
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  const handleSubmit = async (event) => {
-    event.preventDefault(); // Prevent default form submission
-
-    if (!validateInputs()) {
-      return; // Stop if inputs are invalid
-    }
-
-    const data = new FormData(event.currentTarget);
-    const email = data.get('email');
-    const password = data.get('password');
-
-    try {
-      const response = await axios.post('http://localhost:5000/api/auth/signin', {
-        email,
-        password,
-      });
-      // Handle successful login
-      console.log('Login successful', response.data);
-      // Optionally redirect user or store token, etc.
-    } catch (error) {
-      console.error('Login failed', error);
-      // Optionally show an error message to the user
-      setEmailError(true);
-      setEmailErrorMessage('Invalid email or password.');
-    }
-  };
-
-  const validateInputs = () => {
-    const email = document.getElementById('email');
-    const password = document.getElementById('password');
-    let isValid = true;
-
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-      setEmailError(true);
-      setEmailErrorMessage('Please enter a valid email address.');
-      isValid = false;
-    } else {
-      setEmailError(false);
-      setEmailErrorMessage('');
-    }
-
-    if (!password.value || password.value.length < 6) {
-      setPasswordError(true);
-      setPasswordErrorMessage('Password must be at least 6 characters long.');
-      isValid = false;
-    } else {
-      setPasswordError(false);
-      setPasswordErrorMessage('');
-    }
-
-    return isValid;
-  };
 
   return (
     <AppTheme {...props}>
@@ -132,32 +78,45 @@ export default function SignIn(props) {
         <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} />
         <Card variant="outlined">
           <SitemarkIcon />
-          <Typography component="h1" variant="h4" sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}>
-            Sign in
+          <Typography component="h1" variant="h4" sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)', fontFamily: '"Roboto", sans-serif' }}>
+            Iniciar Sesión
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 2 }}>
+          <Box component="form" noValidate sx={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 2 }}>
             <FormControl>
-              <FormLabel htmlFor="email">Email</FormLabel>
+              <FormLabel htmlFor="email">Correo Electrónico</FormLabel>
               <TextField
                 error={emailError}
                 helperText={emailErrorMessage}
                 id="email"
                 type="email"
                 name="email"
-                placeholder="your@email.com"
+                placeholder="tu@correo.com"
                 autoComplete="email"
                 autoFocus
                 required
                 fullWidth
                 variant="outlined"
                 color={emailError ? 'error' : 'primary'}
-                sx={{ ariaLabel: 'email' }}
+                sx={{
+                  fontFamily: '"Roboto", sans-serif',
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': { borderColor: 'primary.main' },
+                    '&:hover fieldset': { borderColor: 'primary.light' },
+                    '&.Mui-focused fieldset': { borderColor: 'secondary.main' },
+                  },
+                }}
               />
             </FormControl>
             <FormControl>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <FormLabel htmlFor="password">Password</FormLabel>
-                <Link component="button" type="button" onClick={handleClickOpen} variant="body2" sx={{ alignSelf: 'baseline' }}>
+                <FormLabel htmlFor="password">Contraseña</FormLabel>
+                <Link component="button" type="button" onClick={handleClickOpen} variant="body2" sx={{
+                  alignSelf: 'baseline',
+                  color: 'secondary.main',
+                  textDecoration: 'underline',
+                  ':hover': { color: 'secondary.dark' },
+                  fontFamily: '"Roboto", sans-serif',
+                }}>
                   Forgot your password?
                 </Link>
               </Box>
@@ -169,34 +128,48 @@ export default function SignIn(props) {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                autoFocus
                 required
                 fullWidth
                 variant="outlined"
                 color={passwordError ? 'error' : 'primary'}
+                sx={{ fontFamily: '"Roboto", sans-serif' }}
               />
             </FormControl>
-            <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Recordarme"
+              sx={{ fontFamily: '"Roboto", sans-serif' }}
+            />
             <ForgotPassword open={open} handleClose={handleClose} />
-            <Button type="submit" fullWidth variant="contained">
-              Sign in
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{
+                backgroundColor: 'primary.main',
+                ':hover': { backgroundColor: 'primary.dark' },
+                fontWeight: 'bold',
+                fontFamily: '"Roboto", sans-serif',
+              }}
+            >
+              Iniciar Sesión
             </Button>
-            <Typography sx={{ textAlign: 'center' }}>
-              Don&apos;t have an account?{' '}
+            <Typography sx={{ textAlign: 'center', fontFamily: '"Roboto", sans-serif' }}>
+              ¿No tienes una cuenta?{' '}
               <span>
-                <Link href="/material-ui/getting-started/templates/sign-in/" variant="body2" sx={{ alignSelf: 'center' }}>
-                  Sign up
+                <Link href="/material-ui/getting-started/templates/sign-in/" variant="body2" sx={{ color: 'primary.main', fontFamily: '"Roboto", sans-serif' }}>
+                  Regístrate
                 </Link>
               </span>
             </Typography>
           </Box>
-          <Divider>or</Divider>
+          <Divider>o</Divider>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <Button fullWidth variant="outlined" onClick={() => alert('Sign in with Google')} startIcon={<GoogleIcon />}>
-              Sign in with Google
+            <Button fullWidth variant="outlined" onClick={() => alert('Iniciar sesión con Google')} startIcon={<GoogleIcon />} sx={{ fontFamily: '"Roboto", sans-serif' }}>
+              Iniciar sesión con Google
             </Button>
-            <Button fullWidth variant="outlined" onClick={() => alert('Sign in with Facebook')} startIcon={<FacebookIcon />}>
-              Sign in with Facebook
+            <Button fullWidth variant="outlined" onClick={() => alert('Iniciar sesión con Facebook')} startIcon={<FacebookIcon />} sx={{ fontFamily: '"Roboto", sans-serif' }}>
+              Iniciar sesión con Facebook
             </Button>
           </Box>
         </Card>

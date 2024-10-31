@@ -1,0 +1,29 @@
+html, body {
+    margin: 0; /* Eliminar el margen por defecto */
+    height: 100%; /* Asegurarse de que ocupe toda la altura */
+  }
+  
+  .login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Ocupa toda la altura de la pantalla */
+    transition: background-color 0.3s, color 0.3s;
+    padding: 20px; /* Añadir un poco de espacio alrededor */
+  }
+  
+  .login-container.light {
+    background-color: #f0f0f0; /* Fondo claro */
+    color: #000; /* Texto oscuro */
+  }
+  
+  .login-container.dark {
+    background-color: #333; /* Fondo oscuro */
+    color: #fff; /* Texto claro */
+  }
+  
+  button {
+    margin: 10px 0; /* Espacio entre el botón y otros elementos */
+  }
+  
